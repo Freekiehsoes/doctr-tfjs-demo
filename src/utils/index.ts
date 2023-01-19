@@ -242,6 +242,13 @@ export const getHeatMapFromImage = async ({
       return;
     }
 
+    console.log({
+        detectionModel,
+        heatmapContainer,
+        imageObject,
+        size,
+    })
+
     heatmapContainer!.width = imageObject.width;
     heatmapContainer!.height = imageObject.height;
     let tensor = getImageTensorForDetectionModel(imageObject, size);

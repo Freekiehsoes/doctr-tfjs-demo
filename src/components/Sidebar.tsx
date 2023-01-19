@@ -24,15 +24,11 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 interface Props {
   detConfig: ModelConfig;
-  setDetConfig: (value: any) => void;
   recoConfig: ModelConfig;
-  setRecoConfig: (value: any) => void;
 }
 export default function Sidebar({
   detConfig,
-  setDetConfig,
   recoConfig,
-  setRecoConfig,
 }: Props): JSX.Element {
   const classes = useStyles();
   return (
@@ -64,7 +60,6 @@ export default function Sidebar({
           <Typography>Detection model</Typography>
           <SelectInput
             value={detConfig}
-            onChange={(value) => setDetConfig(value)}
             options={Object.values(DET_CONFIG)}
           />
         </Box>
@@ -72,7 +67,6 @@ export default function Sidebar({
           <Typography>Recognition model</Typography>
           <SelectInput
             value={recoConfig}
-            onChange={(value) => setRecoConfig(value)}
             options={Object.values(RECO_CONFIG)}
           />
         </Box>
