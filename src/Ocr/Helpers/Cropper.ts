@@ -1,9 +1,6 @@
-import {LineConfig} from "konva/lib/shapes/Line";
-
 export interface CropperShape {
     id: string;
     coordinates: number[][];
-    config?: LineConfig;
 }
 
 export interface CropperCrop {
