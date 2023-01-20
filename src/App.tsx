@@ -16,6 +16,17 @@ function App() {
             words.push(...await ocr.processImage('images/image3.jpeg'));
             words.push(...await ocr.processImage('images/image4.jpg'));
             console.log(words);
+
+            words.forEach(imageWords => {
+                const ol = document.createElement('ol');
+                imageWords.forEach(word => {
+                    const li = document.createElement('li');
+                    li.innerText = word.words.join(' ');
+                    ol.appendChild(li);
+                });
+                document.body.appendChild(ol);
+
+            })
         })();
     }, []);
 
