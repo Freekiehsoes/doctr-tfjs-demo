@@ -1,12 +1,10 @@
 import {OcrData} from "./OcrData";
-import {AnnotationData} from "react-mindee-js";
-import {extractBoundingBoxesFromHeatmap, extractWords, getHeatMapFromImage} from "../utils";
-import {Word} from "../common/types";
-import OcrStage from "./OcrStage";
-import {Stage} from "konva/lib/Stage";
+import {Cropper} from "./Helpers/Cropper";
+import {Heatmap} from "./Helpers/Heatmap";
+import {WordExtractor} from "./Helpers/WordExtractor";
 
 export class Ocr {
-    private data: OcrData;
+    private readonly data: OcrData;
 
     private imageObject: HTMLImageElement | null = null;
 
@@ -21,13 +19,8 @@ export class Ocr {
 
     public async processImage(imageUrl: string) {
         this.imageObject = await this.loadImage(imageUrl);
-        await getHeatMapFromImage({
-            detectionModel: this.data.detectionModel,
-            heatmapContainer: this.data.heatMapContainerElement,
-            imageObject: this.imageObject,
-            size: [this.data.detConfig.height, this.data.detConfig.width]
-        });
-        await this.getBoundingBoxes();
+
+        await Heatmap.create(this.data, this.imageObject);
 
         return await this.getWords();
     }
@@ -38,38 +31,16 @@ export class Ocr {
             imageObject.onload = () => {
                 resolve(imageObject);
             }
+            imageObject.onerror = (e) => {
+                console.log(e);
+            }
             imageObject.src = imageUrl
         });
     }
 
-    private async getBoundingBoxes() {
-        return new Promise<void>((resolve) => {
-            const boundingBoxes = extractBoundingBoxesFromHeatmap([
-                this.data.detConfig.height,
-                this.data.detConfig.width
-            ]);
-            this.data.setAnnotationData({
-                image: this.imageObject?.src,
-                shapes: boundingBoxes
-            });
-            resolve();
-        });
-    }
-
     private async getWords() {
-        return await extractWords({
-            recognitionModel: this.data.recognitionModel,
-            stage: await this.getAnnotationStage(this.data.getAnnotationData()),
-            size: [this.data.recoConfig.height, this.data.recoConfig.width]
-        });
-    }
-
-    private async getAnnotationStage(annotationData: AnnotationData) {
-        const stage = await OcrStage(annotationData, this.imageObject as HTMLImageElement);
-        return new Promise<Stage>((resolve) => {
-            setTimeout(() => {
-                resolve(stage);
-            }, 2000);
-        });
+        const cropper = new Cropper(this.imageObject!, this.data.getAnnotationData().shapes!);
+        const crops = await cropper.getCrops();
+        return await WordExtractor.getWords(crops, this.data);
     }
 }

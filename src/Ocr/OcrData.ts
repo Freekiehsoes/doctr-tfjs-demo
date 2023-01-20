@@ -1,7 +1,6 @@
 import {GraphModel, loadGraphModel} from "@tensorflow/tfjs";
 import {DET_CONFIG, RECO_CONFIG} from "../common/constants";
-import {AnnotationData} from "react-mindee-js";
-import {Stage} from "konva/lib/Stage";
+import {OcrAnnotationData} from "./Interfaces/OcrAnnotationData";
 
 export class OcrData {
     public recognitionModel!: GraphModel;
@@ -9,16 +8,13 @@ export class OcrData {
     public detConfig = DET_CONFIG.db_mobilenet_v2;
     public recoConfig = RECO_CONFIG.crnn_vgg16_bn;
     public readonly heatMapContainerElement!: HTMLCanvasElement;
-
-    public annotationStage!: Stage;
-    private annotationData: AnnotationData = {
+    private annotationData: OcrAnnotationData = {
         image: null
     };
 
     private constructor() {
         this.heatMapContainerElement = document.createElement("canvas");
         this.heatMapContainerElement.id = "heatmap";
-        document.body.appendChild(this.heatMapContainerElement);
         const context = this.heatMapContainerElement.getContext("2d");
         context?.clearRect(0, 0, this.heatMapContainerElement.width, this.heatMapContainerElement.height);
     }
@@ -34,11 +30,19 @@ export class OcrData {
         this.detectionModel = await loadGraphModel(this.detConfig.path);
     }
 
-    public getAnnotationData(): AnnotationData {
+    public getAnnotationData(): OcrAnnotationData {
         return this.annotationData;
     }
 
-    public setAnnotationData(annotationData: Partial<AnnotationData>) {
+    public getDetconfigSize(): [number, number] {
+        return [this.detConfig.height, this.detConfig.width];
+    }
+
+    public getRecoconfigSize(): [number, number] {
+        return [this.recoConfig.height, this.recoConfig.width];
+    }
+
+    public setAnnotationData(annotationData: Partial<OcrAnnotationData>) {
         this.annotationData = {...this.annotationData, ...annotationData};
     }
 }

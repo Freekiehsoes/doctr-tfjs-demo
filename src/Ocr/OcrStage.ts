@@ -55,6 +55,7 @@ export default async function OcrStage(annotationData: AnnotationData, imageObje
             stroke: config.stroke,
             strokeWidth: 2,
             closed: true,
+            name: "shape"
         });
     });
 

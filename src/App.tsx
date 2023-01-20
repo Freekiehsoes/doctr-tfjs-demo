@@ -11,8 +11,8 @@ function App() {
   useEffect(() => {
     (async () => {
       const ocr = await Ocr.create();
-      const image = await ocr.processImage('car.jpg');
-      console.log(image);
+      const words = await ocr.processImage('car.jpg');
+        console.log(words);
     })();
   }, []);
 
