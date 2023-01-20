@@ -1,7 +1,7 @@
 import {OcrData} from "../OcrData";
 import {CropperCrop} from "./Cropper";
 import {argMax, browser, concat, scalar, softmax, unstack} from "@tensorflow/tfjs";
-import {REC_MEAN, REC_STD, VOCAB} from "../../common/constants";
+import {REC_MEAN, REC_STD, VOCAB} from "../common/constants";
 
 export class WordExtractor {
     private data: OcrData;

@@ -1,6 +1,6 @@
 import {OcrData} from "../OcrData";
 import {browser, scalar, squeeze} from "@tensorflow/tfjs";
-import {DET_MEAN, DET_STD} from "../../common/constants";
+import {DET_MEAN, DET_STD} from "../common/constants";
 import cv from "@techstark/opencv-js";
 
 export class Heatmap {

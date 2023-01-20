@@ -1,5 +1,5 @@
 import {GraphModel, loadGraphModel} from "@tensorflow/tfjs";
-import {DET_CONFIG, RECO_CONFIG} from "../common/constants";
+import {DET_CONFIG, RECO_CONFIG} from "./common/constants";
 import {OcrAnnotationData} from "./Interfaces/OcrAnnotationData";
 
 export class OcrData {
